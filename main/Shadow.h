@@ -4,5 +4,6 @@
 #include "stm32f4xx_conf.h"
 
 void Main_Start(void* pvParameters);
+int8_t Cmd(void);
 
 #endif

@@ -4,5 +4,6 @@
 #include "stm32f4xx_conf.h"
 
 void BF_Start(void);
+void BF_Stack(void);
 
 #endif
