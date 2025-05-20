@@ -338,7 +338,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--diag-suppress=870</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
               <IncludePath>..\st_core;..\st_lib;..\os_src;..\main;..\library;..\o</IncludePath>
@@ -987,6 +987,18 @@
         </Group>
         <Group>
           <GroupName>library</GroupName>
+          <Files>
+            <File>
+              <FileName>U_USART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\U_USART.c</FilePath>
+            </File>
+            <File>
+              <FileName>U_USART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\library\U_USART.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>main</GroupName>
@@ -1005,6 +1017,26 @@
               <FileName>FreeRTOSConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\main\FreeRTOSConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>BaseFunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\BaseFunc.c</FilePath>
+            </File>
+            <File>
+              <FileName>BaseFunc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\main\BaseFunc.h</FilePath>
+            </File>
+            <File>
+              <FileName>Shadow.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\Shadow.c</FilePath>
+            </File>
+            <File>
+              <FileName>Shadow.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\main\Shadow.h</FilePath>
             </File>
           </Files>
         </Group>
