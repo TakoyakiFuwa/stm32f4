@@ -341,7 +341,7 @@
               <MiscControls>--diag-suppress=870</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\st_core;..\st_lib;..\os_src;..\main;..\library;..\o</IncludePath>
+              <IncludePath>..\st_core;..\st_lib;..\os_src;..\main;..\library;..\o;..\fatfs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -984,6 +984,53 @@
         </Group>
         <Group>
           <GroupName>fatfs</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>diskio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\fatfs\diskio.h</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\fatfs\ff.h</FilePath>
+            </File>
+            <File>
+              <FileName>ffconf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\fatfs\ffconf.h</FilePath>
+            </File>
+            <File>
+              <FileName>ffsystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\ffsystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\ffunicode.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdio_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\sdio_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdio_sd.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\fatfs\sdio_sd.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>library</GroupName>
