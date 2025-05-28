@@ -38,25 +38,41 @@
  *	CS	->	PD13
  *	BLK	->	PD12
  */
+/*当前正在进行fpc软排线测试
+ *PA12	->	NC
+ *PA11	->	GND
+ *PA8	->	CS
+ *PC7	->	IOVCC
+ *PC6	->	VCC
+ *PD14	->	SCL
+ *PD13	->	SDA
+ *PD12	->	A0	
+ *PD10	->	RST
+ *PD9	->	GND
+ *PD8	->	LED+
+ *PB15	->	LED-
+ *PB14	->	GND
+ *PB13	->	NC
+ */
 /*  高电平:  GPIOx->BSRRL = GPIO_Pin;
  *  低电平:  GPIOx->BSRRH = GPIO_Pin;
  *	当前配置为软件 可根据引脚配置成硬件SPI配置
  */
-//SCL ->PA8
-#define PIN_TFT_SCL_High() 	GPIOA->BSRRL = GPIO_Pin_8
-#define PIN_TFT_SCL_Low() 	GPIOA->BSRRH = GPIO_Pin_8
-//SDA ->PC7
-#define PIN_TFT_SDA_High() 	GPIOC->BSRRL = GPIO_Pin_7
-#define PIN_TFT_SDA_Low()	GPIOC->BSRRH = GPIO_Pin_7
-//RST ->PC6
-#define PIN_TFT_RST_High()	GPIOC->BSRRL = GPIO_Pin_6
-#define PIN_TFT_RST_Low()	GPIOC->BSRRH = GPIO_Pin_6
-//DC  ->PD14
-#define PIN_TFT_DC_Data()	GPIOD->BSRRL = GPIO_Pin_14
-#define PIN_TFT_DC_Cmd()	GPIOD->BSRRH = GPIO_Pin_14
-//CS  ->PD13
-#define PIN_TFT_CS_High()	GPIOD->BSRRL = GPIO_Pin_13
-#define PIN_TFT_CS_Low()	GPIOD->BSRRH = GPIO_Pin_13
+//SCL ->PD14
+#define PIN_TFT_SCL_High() 	GPIOD->BSRRL = GPIO_Pin_14
+#define PIN_TFT_SCL_Low() 	GPIOD->BSRRH = GPIO_Pin_14
+//SDA ->PD13
+#define PIN_TFT_SDA_High() 	GPIOD->BSRRL = GPIO_Pin_13
+#define PIN_TFT_SDA_Low()	GPIOD->BSRRH = GPIO_Pin_13
+//RST ->PD10
+#define PIN_TFT_RST_High()	GPIOD->BSRRL = GPIO_Pin_10
+#define PIN_TFT_RST_Low()	GPIOD->BSRRH = GPIO_Pin_10
+//DC  ->PD12
+#define PIN_TFT_DC_Data()	GPIOD->BSRRL = GPIO_Pin_12
+#define PIN_TFT_DC_Cmd()	GPIOD->BSRRH = GPIO_Pin_12
+//CS  ->PA8
+#define PIN_TFT_CS_High()	GPIOA->BSRRL = GPIO_Pin_8
+#define PIN_TFT_CS_Low()	GPIOA->BSRRH = GPIO_Pin_8
 
 /**@brief  内部使用 TFT屏幕相关引脚初始化 日后根据需要修改
   *@param  void
@@ -64,28 +80,48 @@
   */
 static void Init_TFTPin(void)
 {
+/*	
+ *PA11	->	GND
+ *PA8	->	CS
+ *PC7	->	IOVCC
+ *PC6	->	VCC
+ *PD14	->	SCL
+ *PD13	->	SDA
+ *PD12	->	A0	
+ *PD10	->	RST
+ *PD9	->	GND
+ *PD8	->	LED+
+ *PB15	->	LED-
+ *PB14	->	GND
+ */
 	//引脚时钟初始化
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
 	//GPIO配置
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_11|GPIO_Pin_8;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11|GPIO_Pin_8;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(GPIOA,&GPIO_InitStruct);
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;
 	GPIO_Init(GPIOC,&GPIO_InitStruct);
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14;
 	GPIO_Init(GPIOD,&GPIO_InitStruct);
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15|GPIO_Pin_14;
+	GPIO_Init(GPIOB,&GPIO_InitStruct);
 	//常规电平置位
-		//VCC/BLK->1
-	GPIO_WriteBit(GPIOA,GPIO_Pin_11,Bit_SET);
-	GPIO_WriteBit(GPIOD,GPIO_Pin_12,Bit_SET);
-		//GND
-	GPIO_WriteBit(GPIOA,GPIO_Pin_12,Bit_RESET);
+		//PC7/PC6/PD8
+	GPIO_WriteBit(GPIOC,GPIO_Pin_6|GPIO_Pin_7,Bit_SET);
+	GPIO_WriteBit(GPIOD,GPIO_Pin_8,Bit_SET);
+		//PA11/PD9/PB15/PB14 
+	GPIO_WriteBit(GPIOA,GPIO_Pin_11,Bit_RESET);
+	GPIO_WriteBit(GPIOD,GPIO_Pin_9,Bit_RESET);
+	GPIO_WriteBit(GPIOB,GPIO_Pin_15|GPIO_Pin_14,Bit_RESET);
+	U_Printf("dwhiafhwihfiwahihf? \r\n");
 }
 /**@brief  TFT屏幕初始化
   *@param  void
@@ -106,23 +142,23 @@ void Init_TFT(void)
 		//软件初始化
 	TFT_SoftwareInit();
 		//画蓝白粉()
-	uint8_t width = 128/3 +1;
+	uint8_t width = 130/3 +1;
 	uint16_t blue  = TFT_RGB888To565(0x5FCDE4);
 	uint16_t white = TFT_RGB888To565(0xFFFFFF); 
 	uint16_t pink  = TFT_RGB888To565(0xFFB6C1);
 	
-	TFT_SetRect(0,0,160,width);
-	for(int i=0;i<width*160;i++)
+	TFT_SetRect(0,0,165,width);
+	for(int i=0;i<width*165;i++)
 	{
 		TFT_WriteData16(pink);
 	}
-	TFT_SetRect(0,width,160,width);
-	for(int i=0;i<width*160;i++)
+	TFT_SetRect(0,width,165,width);
+	for(int i=0;i<width*165;i++)
 	{
 		TFT_WriteData16(white);
 	}
-	TFT_SetRect(0,width*2,160,width);
-	for(int i=0;i<width*160;i++)
+	TFT_SetRect(0,width*2,165,width);
+	for(int i=0;i<width*165;i++)
 	{
 		TFT_WriteData16(blue);
 	}

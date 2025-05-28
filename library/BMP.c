@@ -47,7 +47,7 @@ void Init_BMP(void)
 		//当前配置为xy不反转 xy轴交换
 	TFT_SetXY(0,0,1);
 	U_Printf("BMP.c:初始化完成，包含TFT屏幕和FATFS \r\n");
-	BMP_BMP("0:/bmp10.bmp",0,0);
+	BMP_BMP("0:/ciallo_a.bmp",1,0);
 }
 /**@brief  打印文件头信息
   *@param  bmp_infor 要打印的文件信息
