@@ -294,7 +294,20 @@ void Cmd_TFT_XYTest(void)
 		TFT_WriteData16(green);
 	}
 }
-  
+/**@brief  设置TFT屏幕的xy轴对称或者换向
+  *@param  x y 对称设置
+  *@param  x_y 交换xy轴
+  *@retval void
+  *@add	   库的默认配置是0x60(0110 0000) 即x反转 y不反转 xy调换
+  */
+void TFT_SetXY(uint8_t x,uint8_t y,uint8_t x_y) 
+{
+	uint8_t xy_data = (y<<7)|(x<<6)|(x_y<<5);
+	//Y反转-X反转-XY调换-Y刷新方向-RGB(0)/BGR(1)-X刷新方向-0-0
+	//0xC0(1100 0000)->(Y反转-X反转-XY不调换-0 0000)
+	TFT_WriteCmd(0x36); //MX, MY, RGB mode 
+	TFT_WriteData(xy_data);
+}
 /**@brief  这段完全来自商家的例程
   *@param  void
   *@retval void

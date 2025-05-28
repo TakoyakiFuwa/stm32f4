@@ -195,6 +195,11 @@ void U_WriteHex(uint32_t hex)
 		U_Putchar('0');
 		return;
 	}
+	else if(hex==0xFFFFFFFF)
+	{
+		U_WriteWords("FFFFFFFF");
+		return;
+	}
 	//测量位数
 	uint32_t hex_length = 0x01;
 	int length_num = 0;

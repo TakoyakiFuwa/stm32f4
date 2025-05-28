@@ -14,6 +14,8 @@
 #include "ff.h"
 /*  设备库  */
 #include "TFT_ST7735.h"
+/*  BMP解码  */
+#include "BMP.h"
 
 /*	希望我这次重新写模板可以用的久一点...
  *	想开始做一些很有趣的项目....
@@ -29,7 +31,8 @@ void Main_Start(void* pvParameters)
 	BF_Start();
 	//初始化 建议格式:Init_XXX()
 	Init_Func();
-	Init_TFT();
+//	Init_TFT();
+	Init_BMP();
 	
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
