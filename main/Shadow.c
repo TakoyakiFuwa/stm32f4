@@ -16,6 +16,7 @@
 #include "TFT_ST7735.h"
 /*  BMP解码  */
 #include "BMP.h"
+#include "UR_USART.h"
 
 /*	希望我这次重新写模板可以用的久一点...
  *	想开始做一些很有趣的项目....
@@ -33,6 +34,7 @@ void Main_Start(void* pvParameters)
 	Init_Func();
 //	Init_TFT();
 	Init_BMP();
+	Init_UR();
 	
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
@@ -69,7 +71,23 @@ int8_t Cmd(void)
 		Cmd_TFT_XYTest();
 		U_Printf("颜色输出 \r\n");
 	}
-	
+	else if(Command("WQ"))
+	{
+		char path[] = {"0:/bmp10.bmp"};
+		uint8_t a=0;
+		uint8_t b=0;
+		
+		uint8_t width,height;
+		BMP_GetResize(path,&width,&height,a);
+		U_Printf("即将通过USART1输出图片:%s (%d:%d)\r\n",path,width,height);
+		UR_Putchar(width);
+		UR_Putchar(height);
+		BMP_BMP((const char*)path,a,b);
+		BMP_ChangeFunc(U_RGB);
+		BMP_BMP((const char*)path,a,b);
+		BMP_ChangeFunc(TFT_WriteData16);
+		U_Printf("\r\n\r\n\r\n\r\n处理完成!!! \r\n");
+	}
 	//CLI :>
 	else if(Command("HELP"))
 	{

@@ -22,6 +22,32 @@
  *			——2025/5/27-20:44
  */
 
+void (*rgb_func)(uint16_t rgb565);
+void BMP_GetResize(const char* path,uint8_t* width,uint8_t* height,uint8_t d_width)
+{
+	
+	bmp_head bh = BMP_ReadInfor(path);
+	if(bh.width>180 || bh.height>150)
+	{
+		uint8_t scale = bh.width/160>bh.height/128 ? bh.width/160:bh.height/128;
+		scale++;
+			//s_ 缩放后的尺寸数据
+		uint8_t s_width=bh.width/scale,s_height=bh.height/scale;
+		*width = s_width+d_width;
+		*height = s_height;
+		return;
+	}
+	*width = bh.width;
+	*height = bh.height;
+}
+/**@brief  更换屏幕输出函数
+  *@param  target_func 要更换的函数
+  *@retval void
+  */
+void BMP_ChangeFunc(void (*target_func)(uint16_t rgb565))
+{
+	rgb_func = target_func;
+}
 /**@brief  初始化 关于TFT和SD卡
   *@param  void
   *@retval void
@@ -46,6 +72,7 @@ void Init_BMP(void)
 		//	+——————————> x/160px
 		//当前配置为xy不反转 xy轴交换
 	TFT_SetXY(0,0,1);
+	BMP_ChangeFunc(TFT_WriteData16);
 	U_Printf("BMP.c:初始化完成，包含TFT屏幕和FATFS \r\n");
 	BMP_BMP("0:/bmp10.bmp",0,0);
 }
@@ -152,12 +179,12 @@ void BMP_BMP(const char* path,int8_t d_width,int8_t px_fix)
 		px_rgb565 = (px_rgb.red&0xF8)<<8;//6+5-3
 		px_rgb565 |= (px_rgb.green&0xFC)<<3;//5-2
 		px_rgb565 |= (px_rgb.blue&0xF8)>>3;
-		TFT_WriteData16(px_rgb565);
+		rgb_func(px_rgb565);
 		if(px_fix!=0 && i%width==0)
 		{
 			if(temp_px_fix++%px_fix==0)
 			{
-				TFT_WriteData16(px_rgb565);
+				rgb_func(px_rgb565);
 			}
 		}
 	}
@@ -210,7 +237,7 @@ void BMP_AdjustBMP(const char* path,int8_t d_scale,int8_t d_width,int8_t px_fix)
 			px_rgb565 = (px_rgb.red&0xF8)<<8;//6+5-3
 			px_rgb565 |= (px_rgb.green&0xFC)<<3;//5-2
 			px_rgb565 |= (px_rgb.blue&0xF8)>>3;
-			TFT_WriteData16(px_rgb565);
+			rgb_func(px_rgb565);
 		}
 		//像素补全
 		if(px_fix!=0)
@@ -219,7 +246,7 @@ void BMP_AdjustBMP(const char* path,int8_t d_scale,int8_t d_width,int8_t px_fix)
 			if(temp_px_fix%px_fix==0)
 			{
 				count++;
-				TFT_WriteData16(px_rgb565);
+				rgb_func(px_rgb565);
 			}
 		}
 	}

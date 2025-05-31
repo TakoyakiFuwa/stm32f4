@@ -27,7 +27,9 @@ typedef struct{
 	uint8_t red;
 //	uint8_t x;		//保留，应当是0
 }bmp_rgb;
+void BMP_GetResize(const char* path,uint8_t* width,uint8_t* height,uint8_t d_width);
 void Init_BMP(void);
+void BMP_ChangeFunc(void (*target_func)(uint16_t rgb565));
 bmp_head BMP_ReadInfor(const char* path);
 void BMP_BMP(const char* path,int8_t d_width,int8_t px_fix);
 void BMP_AdjustBMP(const char* path,int8_t d_scale,int8_t d_width,int8_t px_fix);

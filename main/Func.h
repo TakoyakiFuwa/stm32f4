@@ -5,6 +5,7 @@
 #include "stm32f4xx_conf.h"
 
 void Init_Func(void);
+void U_RGB(uint16_t rgb565);
 void Task_Func(void* pvParameters);
 void Cmd_Func(void);
 

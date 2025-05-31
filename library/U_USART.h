@@ -6,7 +6,7 @@
 void Init_USART(void);
 void U_Test(void);
 int8_t Command(const char* cmd);
-//void U_Putchar(uint8_t CHAR);
+void U_Putchar(uint8_t CHAR);
 //void U_WriteWords(const uint8_t* words);
 //void U_WriteNum(uint32_t num);
 //void U_WriteHex(uint32_t hex);
