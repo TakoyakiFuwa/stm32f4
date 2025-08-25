@@ -1045,6 +1045,26 @@
               <FileType>5</FileType>
               <FilePath>..\library\U_USART.h</FilePath>
             </File>
+            <File>
+              <FileName>SPI_SF.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\SPI_SF.c</FilePath>
+            </File>
+            <File>
+              <FileName>SPI_SF.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\library\SPI_SF.h</FilePath>
+            </File>
+            <File>
+              <FileName>TFT_ST7735.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\TFT_ST7735.c</FilePath>
+            </File>
+            <File>
+              <FileName>TFT_ST7735.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\library\TFT_ST7735.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
