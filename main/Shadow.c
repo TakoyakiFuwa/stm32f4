@@ -10,8 +10,8 @@
 #include "task.h"
 /*  外设库  */
 #include "U_USART.h"
-#include "TFT_ST7735.h"
 #include "TFT_Font.h"
+#include "TFT_UI.h"
 /*  FATFS  */
 #include "ff.h"
 
@@ -29,17 +29,19 @@ void Main_Start(void* pvParameters)
 	BF_Start();
 	//初始化 建议格式:Init_XXX()
 	Init_Func();
-		//TFT_Font测试
+		//TFT_Font初始化(字体)
 	Init_TFTF();
-	TFTF_Test();
-	
+		//TFT_UI测试
+	Init_UI();
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
 	taskENTER_CRITICAL();
 		//Func测试
 	TaskHandle_t TASK_FUNC_Handler;
 	xTaskCreate(Task_Func,"Func",64,NULL,1,&TASK_FUNC_Handler);
-	
+		//渲染
+	TaskHandle_t TASK_RENDER_Handler;
+	xTaskCreate(Task_Render,"Render",128,NULL,1,&TASK_RENDER_Handler);
 		//退出临界区
 	taskEXIT_CRITICAL();	
 	//打印各线程栈

@@ -57,7 +57,17 @@ void Cmd_Botton(void)
 		}
 	}
 }
-
+/**@brief  渲染
+  */
+#include "TFT_UI.h"
+void Task_Render(void* pvParameters)
+{
+	while(1)
+	{
+		vTaskDelay(100);
+		CircleRender_UI();
+	}
+}
 
 
 

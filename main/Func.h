@@ -9,5 +9,6 @@ void Task_Func(void* pvParameters);
 void Cmd_Func(void);
 
 void Cmd_Botton(void);
+void Task_Render(void* pvParameters);
 
 #endif
