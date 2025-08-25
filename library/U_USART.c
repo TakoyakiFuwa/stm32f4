@@ -106,6 +106,13 @@ void USART2_IRQHandler(void)
 		//清楚空闲标志位
 		USART2->SR;USART2->DR;
 	}
+	else if(USART_GetITStatus(USART2,USART_IT_RXNE)==SET)
+	{
+		USART_Buff[0] = USART_ReceiveData(USART2);
+		USART_RX_Signal = 1;
+		//清除中断标志
+		USART_ClearITPendingBit(USART2,USART_IT_RXNE);
+	}
 }
 /**@brief  测试接口
   */

@@ -11,6 +11,7 @@
 /*  外设库  */
 #include "U_USART.h"
 #include "TFT_ST7735.h"
+#include "TFT_Font.h"
 /*  FATFS  */
 #include "ff.h"
 
@@ -28,7 +29,9 @@ void Main_Start(void* pvParameters)
 	BF_Start();
 	//初始化 建议格式:Init_XXX()
 	Init_Func();
-	TFT_Init();
+		//TFT_Font测试
+	Init_TFTF();
+	TFTF_Test();
 	
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
@@ -59,7 +62,12 @@ int8_t Cmd(void)
 	{
 		Cmd_Func();
 	}
-		
+	else if(Command("B"))
+	{
+		U_Printf("进入模拟按键 \r\n");
+		Cmd_Botton();
+		U_Printf("退出模拟按键 \r\n");
+	}
 	
 	//CLI :>
 	else if(Command("HELP"))
@@ -69,6 +77,7 @@ int8_t Cmd(void)
 		U_Printf("RESET	  : 系统重启 \r\n");
 		U_Printf("STACK	  : 获取各线程剩余栈 \r\n");
 		U_Printf("FUNC	  : 架构库Func.h测试命令行 \r\n");
+		U_Printf("B		  : 进入wasd模拟按键模式 \r\n");
 	}
 	else
 	{

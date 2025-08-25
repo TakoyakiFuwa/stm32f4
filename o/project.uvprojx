@@ -341,7 +341,7 @@
               <MiscControls>--diag-suppress=870</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\st_core;..\st_lib;..\os_src;..\main;..\library;..\o;..\fatfs</IncludePath>
+              <IncludePath>..\st_core;..\st_lib;..\os_src;..\main;..\library;..\o;..\fatfs;..\ui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1064,6 +1064,26 @@
               <FileName>TFT_ST7735.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\library\TFT_ST7735.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ui</GroupName>
+          <Files>
+            <File>
+              <FileName>TFT_Font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\TFT_Font.c</FilePath>
+            </File>
+            <File>
+              <FileName>TFT_Font.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ui\TFT_Font.h</FilePath>
+            </File>
+            <File>
+              <FileName>font.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ui\font.h</FilePath>
             </File>
           </Files>
         </Group>

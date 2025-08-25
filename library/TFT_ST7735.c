@@ -92,7 +92,7 @@ static void TFT_SoftwareInit(void);
   *@param  void
   *@retval void
   */
-void TFT_Init(void)
+void Init_TFT(void)
 {
 	//通信初始化
 	SPI_Init();

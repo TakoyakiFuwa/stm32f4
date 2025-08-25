@@ -8,4 +8,6 @@ void Init_Func(void);
 void Task_Func(void* pvParameters);
 void Cmd_Func(void);
 
+void Cmd_Botton(void);
+
 #endif
