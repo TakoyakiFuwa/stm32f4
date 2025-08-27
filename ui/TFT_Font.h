@@ -22,6 +22,13 @@
 #define InFT_RGB_Cat_6364				3
 #define InFT_pic_SunRain_2424			4
 #define InFT_RGB_CatCake_6464			5
+#define InFT_pic_UpDown_1616			6
+#define InFT_pic_SunRain_1616			7
+#define InFT_pic_up_1616				8
+#define InFT_pic_down_1616				9
+#define InFT_pic_left_1616				10
+#define InFT_pic_right_1616				11
+#define InFT_pic_ok_1616				12
 
 /*  字体结构体  */
 typedef struct tft_font{

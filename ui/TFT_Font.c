@@ -44,7 +44,14 @@ void Init_TFTF(void)
 	FONT[InFT_RGB_Cat_6364] = TFTF_CreateFont((const char*)rgb_cat_6364,63,64);
 	FONT[InFT_pic_SunRain_2424] = TFTF_CreateFont((const char*)pic_sunrain_2424,24,24);
 	FONT[InFT_RGB_CatCake_6464] = TFTF_CreateFont((const char*)rgb_catcake_6464,64,64);
-	
+	FONT[InFT_pic_UpDown_1616] = TFTF_CreateFont((const char*)pic_updown_1616,16,16);
+	FONT[InFT_pic_SunRain_1616] = TFTF_CreateFont((const char*)pic_sunrain_1616,16,16);
+	FONT[InFT_pic_up_1616] = TFTF_CreateFont((const char*)pic_up_1616,16,16);
+	FONT[InFT_pic_down_1616] = TFTF_CreateFont((const char*)pic_down_1616,16,16);
+	FONT[InFT_pic_right_1616] = TFTF_CreateFont((const char*)pic_right_1616,16,16);
+	FONT[InFT_pic_left_1616] = TFTF_CreateFont((const char*)pic_left_1616,16,16);
+	FONT[InFT_pic_ok_1616] = TFTF_CreateFont((const char*)pic_ok_1616,16,16);
+		
 }
 
 

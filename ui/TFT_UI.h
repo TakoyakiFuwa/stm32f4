@@ -4,6 +4,7 @@
 
 /*  定义页面  */
 #define InPG_Test		0
+#define InPG_View		1
 
 /*  UI结构体  */
 typedef struct tft_ui{
@@ -28,6 +29,7 @@ typedef struct tft_ui{
 	void (*Func_Event_DOWN)(struct tft_ui* self);
 	void (*Func_Event_LEFT)(struct tft_ui* self);
 	void (*Func_Event_RIGHT)(struct tft_ui* self);
+	void (*Func_Event_Other)(struct tft_ui* self);
 }tft_ui;
 /*  页面结构体  */
 typedef struct tft_page{

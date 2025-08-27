@@ -1095,6 +1095,26 @@
               <FileType>1</FileType>
               <FilePath>..\ui\TFT_UI.c</FilePath>
             </File>
+            <File>
+              <FileName>UI_Instance.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\UI_Instance.c</FilePath>
+            </File>
+            <File>
+              <FileName>UI_Instance.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ui\UI_Instance.h</FilePath>
+            </File>
+            <File>
+              <FileName>UI_view.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\UI_view.c</FilePath>
+            </File>
+            <File>
+              <FileName>UI_view.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ui\UI_view.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

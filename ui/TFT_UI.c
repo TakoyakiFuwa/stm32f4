@@ -12,6 +12,9 @@ extern tft_pointer 	UI_CURSOR;
 extern tft_ui 		UI[];
 extern tft_page		PAGE[];
  */
+
+#include "UI_Instance.h"
+#include "UI_view.h"
 /**@brief  页面-UI初始化接口
   *@param  void
   *@retval 初始化完成后进入的第一个页面(下标)
@@ -19,7 +22,10 @@ extern tft_page		PAGE[];
 static uint8_t INS_Init_Page(void)
 {
 	//INS_Test(); //页面函数中应该包含有 UI初始化/页面初始化
-	return InPG_Test;
+	Page_Test();
+	Page_View();
+	
+	return InPG_View;
 }
 
 
@@ -28,7 +34,7 @@ static uint8_t INS_Init_Page(void)
 
 /*  全局变量  */
 tft_pointer UI_CURSOR;				//光标
-tft_ui 		UI[200];				//UI
+tft_ui 		UI[128];				//UI
 tft_page 	PAGE[8];				//页面
 /*  渲染队列  */
 tft_ui* 	QUEUE_RENDER_UI[100];		//用is_present=100作为尾标志
@@ -145,6 +151,7 @@ tft_ui UI_CreateUI(uint16_t x,uint16_t y,uint8_t InFT,uint16_t ft_color,uint16_t
 	u.Func_Event_DOWN 	= NULL_UI_Func;
 	u.Func_Event_LEFT 	= NULL_UI_Func;
 	u.Func_Event_RIGHT 	= NULL_UI_Func;
+	u.Func_Event_Other 	= NULL_UI_Func;
 	//不一定会用上，后续补充内容
 	for(int i=0;i<=3;i++)
 	{
