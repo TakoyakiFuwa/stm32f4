@@ -14,17 +14,17 @@
  */
 
 /*	在写f4_ui的内容
- *	PA8		->	SCL
- *	PC7		->	SDA
- *	PD13	->	CS 
+ *	PD13	->	SCL
+ *	PD12	->	SDA
+ *	PD8		->	CS
  */
 
 /*  接口处理  */
 /*  引脚处理  */
-#define SPI_SW_SCK_L()		GPIOA->BSRRH = GPIO_Pin_8
-#define SPI_SW_MOSI_L()		GPIOC->BSRRH = GPIO_Pin_7
-#define SPI_SW_SCK_H()		GPIOA->BSRRL = GPIO_Pin_8
-#define SPI_SW_MOSI_H()		GPIOC->BSRRL = GPIO_Pin_7
+#define SPI_SW_SCK_L()		GPIOD->BSRRH = GPIO_Pin_13
+#define SPI_SW_SCK_H()		GPIOD->BSRRL = GPIO_Pin_13
+#define SPI_SW_MOSI_L()		GPIOD->BSRRH = GPIO_Pin_12
+#define SPI_SW_MOSI_H()		GPIOD->BSRRL = GPIO_Pin_12
 
 /**@brief  接口 SPI初始化
   *@param  void
@@ -35,20 +35,14 @@ void SPI_SF_Init(void)
 	//引脚初始化
 		//接口 移植时需要配置
 			//时钟初始化	
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
 			//引脚初始化
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_12|GPIO_Pin_13;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStruct);
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
-	GPIO_Init(GPIOC,&GPIO_InitStruct);
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13;
 	GPIO_Init(GPIOD,&GPIO_InitStruct);
 		//引脚初始状态
 	SPI_SF_CS_H();

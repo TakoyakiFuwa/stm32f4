@@ -1065,6 +1065,16 @@
               <FileType>5</FileType>
               <FilePath>..\library\TFT_ST7735.h</FilePath>
             </File>
+            <File>
+              <FileName>bmp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\library\bmp.h</FilePath>
+            </File>
+            <File>
+              <FileName>bmp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\bmp.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

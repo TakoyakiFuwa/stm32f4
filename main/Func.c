@@ -43,12 +43,15 @@ extern int8_t 	USART_RX_Signal;
 extern tft_pointer 	UI_CURSOR;
 void Cmd_Botton(void)
 {
+	int16_t sunrain = 0;
+	uint8_t is_sunrain = 0;
 	while(USART_Buff[0]!='q' && USART_Buff[0]!='Q')
 	{
-		vTaskDelay(10);
+		vTaskDelay(30);
 		if(USART_RX_Signal!=0)
 		{
-			
+			sunrain = 0;
+			is_sunrain = 0;
 			USART_RX_Signal=0;
 			switch(USART_Buff[0])
 			{
@@ -56,9 +59,19 @@ void Cmd_Botton(void)
 			case 'a':case 'A':U_Printf("a\r\n");Other_Button(InFT_pic_left_1616);UI_CURSOR.ui->Func_Event_LEFT(UI_CURSOR.ui);break;
 			case 's':case 'S':U_Printf("s\r\n");Other_Button(InFT_pic_down_1616);UI_CURSOR.ui->Func_Event_DOWN(UI_CURSOR.ui);break;
 			case 'd':case 'D':U_Printf("d\r\n");Other_Button(InFT_pic_right_1616);UI_CURSOR.ui->Func_Event_RIGHT(UI_CURSOR.ui);break;
+			case 'e':case 'E':U_Printf("e\r\n");Other_Button(InFT_pic_ok_1616);UI_CURSOR.ui->Func_Event_Other(UI_CURSOR.ui);break;
 			case 'r':case 'R':U_Printf("1s之后重启 \r\n");NVIC_SystemReset();break;
 			default:U_Printf("None \r\n");
 			}
+		}
+		if(sunrain++>400)
+		{
+			sunrain=-800;
+			if(is_sunrain<2)
+			{
+				Other_Button(InFT_pic_SunRain_1616);
+			}
+			is_sunrain++;
 		}
 	}
 }

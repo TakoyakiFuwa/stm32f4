@@ -3,6 +3,13 @@
 #include "TFT_Font.h"
 #include "TFT_ST7735.h"
 
+/*	写的啥玩意啊这是....
+ *	没什么设计的感觉....写什么都不固定...
+ *	需求也不确定.....
+ *	有需求的适合现场造函数吧....
+ *			——2025/8/27-21:57.秦羽
+ */
+
 /*  UI全局变量  */
 extern tft_pointer 	UI_CURSOR;
 extern tft_ui 		UI[];

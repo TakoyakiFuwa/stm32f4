@@ -14,6 +14,9 @@
 #include "TFT_UI.h"
 /*  FATFS  */
 #include "ff.h"
+/*  BMP  */
+#include "bmp.h"
+
 
 /*	希望我这次重新写模板可以用的久一点...
  *	想开始做一些很有趣的项目....
@@ -33,6 +36,8 @@ void Main_Start(void* pvParameters)
 	Init_TFTF();
 		//TFT_UI测试
 	Init_UI();
+		//BMP测试
+	Test_BMP();
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
 	taskENTER_CRITICAL();

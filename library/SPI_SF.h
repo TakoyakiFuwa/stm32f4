@@ -2,8 +2,8 @@
 #define __SPI_SF_H__
 #include <stdint.h>
 
-#define SPI_SF_CS_L()		GPIOD->BSRRH = GPIO_Pin_13
-#define SPI_SF_CS_H()		GPIOD->BSRRL = GPIO_Pin_13
+#define SPI_SF_CS_L()		GPIOD->BSRRH = GPIO_Pin_8
+#define SPI_SF_CS_H()		GPIOD->BSRRL = GPIO_Pin_8
 
 void SPI_SF_Init(void);
 void SPI_SF_Test(void);

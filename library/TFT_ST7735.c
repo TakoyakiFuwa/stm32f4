@@ -29,14 +29,14 @@
 /*  移植配置区域  */
 
 /*	当前在处理F4板子上的UI
- *	PA12	->	GND
- *	PA11	->	VCC
- *	PA8		->	SCL
- *	PC7		->	SDA
- *	PC6		->	RST
- *	PD14	->	DC
- *	PD13	->	CS
- *	PD12	->	BLK
+ *	PC6		->	GND
+ *	PD14	->	VCC
+ *	PD13	->	SCL
+ *	PD12	->	SDA
+ *	PD10	->	RST
+ *	PD9		->	DC
+ *	PD8		->	CS
+ *	PB15	->	BLK
  */
 /*	方向为:
  *		+--------------->
@@ -53,12 +53,12 @@
 
 /*  TFT屏幕处理  */
 	//低电平复位
-#define TFT_RST_L()		GPIOC->BSRRH = GPIO_Pin_6
-#define TFT_RST_H()		GPIOC->BSRRL = GPIO_Pin_6
+#define TFT_RST_L()		GPIOD->BSRRH = GPIO_Pin_10
+#define TFT_RST_H()		GPIOD->BSRRL = GPIO_Pin_10
 	//低电平指令
-#define TFT_DC_L()		GPIOD->BSRRH = GPIO_Pin_14
+#define TFT_DC_L()		GPIOD->BSRRH = GPIO_Pin_9
 	//高电平数据
-#define TFT_DC_H()		GPIOD->BSRRL = GPIO_Pin_14
+#define TFT_DC_H()		GPIOD->BSRRL = GPIO_Pin_9
 /**@brief  接口 配置相关引脚初始化
   *@param  void
   *@retval void
@@ -75,16 +75,16 @@ static void TFT_PinInit()
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11|GPIO_Pin_12;
-	GPIO_Init(GPIOA,&GPIO_InitStruct);
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15;
+	GPIO_Init(GPIOB,&GPIO_InitStruct);
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
 	GPIO_Init(GPIOC,&GPIO_InitStruct);
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14;
 	GPIO_Init(GPIOD,&GPIO_InitStruct);
-	//PA11->VCC / PA12->GND / PD12->BLK
-	GPIO_WriteBit(GPIOA,GPIO_Pin_11,Bit_SET);
-	GPIO_WriteBit(GPIOA,GPIO_Pin_12,Bit_RESET);
-	GPIO_WriteBit(GPIOD,GPIO_Pin_12,Bit_SET);
+	//PD14->VCC / PC6->GND / PB15->BLK
+	GPIO_WriteBit(GPIOD,GPIO_Pin_14,Bit_SET);
+	GPIO_WriteBit(GPIOB,GPIO_Pin_15,Bit_SET);
+	GPIO_WriteBit(GPIOC,GPIO_Pin_6, Bit_RESET);
 }
 
 static void TFT_SoftwareInit(void);

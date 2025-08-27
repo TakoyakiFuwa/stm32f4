@@ -4,6 +4,12 @@
 #include "UI_Instance.h"
 #include "TFT_ST7735.h"
 
+/*	界面写的乱七八糟....
+ *	好多没什么意义的...装饰线条(?)
+ *	只有那个蓝粉白旗还算满意....
+ *	真可爱呢...
+ *			——2025/8/27-21:59.秦羽
+ */
 
 /*  UI全局变量  */
 extern tft_pointer 	UI_CURSOR;
@@ -96,6 +102,10 @@ void Page_View(void)
 	UI[InUI_view_overview].Func_Event_LEFT = Event_ToViewChange;
 	//按键记忆
 	UI[InUI_view_button] = UI_CreateUI(2,111,InFT_font_Consolas_1608,InCor_Green,InCor_White,Render_View_Button);
+	for(int i=0;i<3;i++)
+	{
+		UI[InUI_view_button].value_text[i] = InFT_pic_SunRain_1616;
+	}
 	//BMP信息
 	UI[InUI_view_infor] = UI_CreateUI(0,0,InFT_font_Pixel_1608,InCor_Black,InCor_Pink,Render_View_Infor);
 	
