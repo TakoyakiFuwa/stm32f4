@@ -18,7 +18,7 @@ extern tft_page		PAGE[];
 
 void Render_View_BackGround(tft_ui* u)
 {
-	TFTF_DrawRect(0,0,180,130,InCor_Purple);
+//	TFTF_DrawRect(0,0,114,85,InCor_Purple);
 	TFTF_DrawRect(0,85,180,50,InCor_Blue);
 	TFTF_DrawRect(114,0,50,50,InCor_Pink);
 	TFTF_DrawRect(114,50,50,35,InCor_White);

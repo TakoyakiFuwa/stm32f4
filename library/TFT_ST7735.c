@@ -227,6 +227,17 @@ void TFT_Clear(uint32_t RGB_888)
 		TFT_Write16Data(rgb565);
 	}
 }
+/**@brief  设置TFT方向
+  *@param  param 		YXV0 0000 翻转 前两位分别是Y X
+  *						第三位V是XY控制交换
+  *@retval void
+  */
+void TFT_SetRotation(uint8_t rotation)
+{
+	TFT_WriteCmd(0x36); 	//MX, MY, RGB mode 
+	TFT_WriteData(rotation);	//YXV0 0000 翻转 前两位分别是Y X
+							//第三位V是XY控制交换
+}
 
 void TFT_Test(void)
 {
