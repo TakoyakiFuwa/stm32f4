@@ -232,10 +232,9 @@ void BMP_SetRect(uint16_t width,uint16_t height)
 }
 void Test_BMP(void)
 {
-	Init_BMP();
 	
 	TFT_SetRotation(Rota_BMP);
-	BMP_AdjustBMP("0:/A.bmp",0,0,114,85,TFT_Write16Data,SetRect);
+	BMP_AdjustBMP("0:/B.bmp",0,0,114,85,TFT_Write16Data,SetRect);
 	TFT_SetRotation(Rota_UI);
 }
 

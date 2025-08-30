@@ -1075,6 +1075,16 @@
               <FileType>1</FileType>
               <FilePath>..\library\bmp.c</FilePath>
             </File>
+            <File>
+              <FileName>proj_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\library\proj_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>proj_file.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\library\proj_file.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -55,11 +55,11 @@ void Cmd_Botton(void)
 			USART_RX_Signal=0;
 			switch(USART_Buff[0])
 			{
-			case 'w':case 'W':U_Printf("w\r\n");Other_Button(InFT_pic_up_1616);UI_CURSOR.ui->Func_Event_UP(UI_CURSOR.ui);break;
-			case 'a':case 'A':U_Printf("a\r\n");Other_Button(InFT_pic_left_1616);UI_CURSOR.ui->Func_Event_LEFT(UI_CURSOR.ui);break;
-			case 's':case 'S':U_Printf("s\r\n");Other_Button(InFT_pic_down_1616);UI_CURSOR.ui->Func_Event_DOWN(UI_CURSOR.ui);break;
-			case 'd':case 'D':U_Printf("d\r\n");Other_Button(InFT_pic_right_1616);UI_CURSOR.ui->Func_Event_RIGHT(UI_CURSOR.ui);break;
-			case 'e':case 'E':U_Printf("e\r\n");Other_Button(InFT_pic_ok_1616);UI_CURSOR.ui->Func_Event_Other(UI_CURSOR.ui);break;
+			case 'w':case 'W':U_Printf("w\r\n");UI_CURSOR.ui->Func_Event_UP(UI_CURSOR.ui);   Other_Button(InFT_pic_up_1616);   break;
+			case 'a':case 'A':U_Printf("a\r\n");UI_CURSOR.ui->Func_Event_LEFT(UI_CURSOR.ui); Other_Button(InFT_pic_left_1616); break;
+			case 's':case 'S':U_Printf("s\r\n");UI_CURSOR.ui->Func_Event_DOWN(UI_CURSOR.ui); Other_Button(InFT_pic_down_1616); break;
+			case 'd':case 'D':U_Printf("d\r\n");UI_CURSOR.ui->Func_Event_RIGHT(UI_CURSOR.ui);Other_Button(InFT_pic_right_1616);break;
+			case 'e':case 'E':U_Printf("e\r\n");UI_CURSOR.ui->Func_Event_Other(UI_CURSOR.ui);Other_Button(InFT_pic_ok_1616);   break;
 			case 'r':case 'R':U_Printf("1s之后重启 \r\n");NVIC_SystemReset();break;
 			default:U_Printf("None \r\n");
 			}

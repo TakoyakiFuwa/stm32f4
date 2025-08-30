@@ -15,7 +15,7 @@
 /*  FATFS  */
 #include "ff.h"
 /*  BMP  */
-#include "bmp.h"
+#include "proj_file.h"
 
 
 /*	希望我这次重新写模板可以用的久一点...
@@ -24,6 +24,7 @@
  *		——2025/5/20-14:41
  */
 
+extern tft_pointer UI_CURSOR;
 /**@brief  用于main中的接口
   */
 void Main_Start(void* pvParameters)
@@ -37,7 +38,7 @@ void Main_Start(void* pvParameters)
 		//TFT_UI测试
 	Init_UI();
 		//BMP测试
-	Test_BMP();
+	Init_Proj();
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
 	taskENTER_CRITICAL();
@@ -48,7 +49,9 @@ void Main_Start(void* pvParameters)
 	TaskHandle_t TASK_RENDER_Handler;
 	xTaskCreate(Task_Render,"Render",128,NULL,1,&TASK_RENDER_Handler);
 		//退出临界区
-	taskEXIT_CRITICAL();	
+	taskEXIT_CRITICAL();
+		//加载第一张图片
+	UI_CURSOR.ui->Func_Event_DOWN(UI_CURSOR.ui);
 	//打印各线程栈
 	BF_Stack();
 	//删除自身线程
