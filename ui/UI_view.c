@@ -212,8 +212,28 @@ void RIGHT_View_Load(tft_ui* u)
 	f1_fixpx = pix;
 	Other_StringCpy(f1_filename,file_name);
 	Other_StringCpy(f1_filepath,file);
-	U1_SendWords("CONFIG7");
-	TFT_Clear(InCor_Orange);
+	U1_SendWords("CONFIG1");
+	//蓝粉白
+	uint16_t rgb565 = TFT_RGB888To565(0x71c9ce);
+	TFT_SetCursor(0,0,160,43);
+	for(int i=0;i<160*43;i++)
+	{
+		TFT_Write16Data(rgb565);
+	}
+	rgb565 = TFT_RGB888To565(0xf6f6f6);
+	TFT_SetCursor(0,43,160,43);
+	for(int i=0;i<160*43;i++)
+	{
+		TFT_Write16Data(rgb565);
+	}
+	rgb565 = TFT_RGB888To565(0xffc7c7);
+	TFT_SetCursor(0,86,160,43);
+	for(int i=0;i<160*43;i++)
+	{
+		TFT_Write16Data(rgb565);
+	}
+	//禁止按键监听渲染
+	UI[InUI_view_button].is_present = 0;
 }
 
 
