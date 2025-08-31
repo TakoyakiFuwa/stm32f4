@@ -12,6 +12,7 @@
 #include "U_USART.h"
 #include "TFT_Font.h"
 #include "TFT_UI.h"
+#include "U1.h"
 /*  FATFS  */
 #include "ff.h"
 /*  BMP  */
@@ -39,6 +40,8 @@ void Main_Start(void* pvParameters)
 	Init_UI();
 		//BMP测试
 	Init_Proj();
+		//接口初始化
+	Init_U1();
 	//线程	 建议格式:Task_XXX()
 		//进入临界区
 	taskENTER_CRITICAL();
@@ -48,6 +51,8 @@ void Main_Start(void* pvParameters)
 		//渲染
 	TaskHandle_t TASK_RENDER_Handler;
 	xTaskCreate(Task_Render,"Render",128,NULL,1,&TASK_RENDER_Handler);
+		//下位机接口
+	xTaskCreate(Task_U1Command,"U1_Command",512,NULL,3,NULL);
 		//退出临界区
 	taskEXIT_CRITICAL();
 		//加载第一张图片
@@ -60,6 +65,7 @@ void Main_Start(void* pvParameters)
 /**@brief  命令行创建接口
   *@param  1有匹配 0没匹配转到BaseFunc
   */
+extern uint8_t USART_Buff[512];
 int8_t Cmd(void)
 {
 	//COMMAND
@@ -77,6 +83,10 @@ int8_t Cmd(void)
 		U_Printf("进入模拟按键 \r\n");
 		Cmd_Botton();
 		U_Printf("退出模拟按键 \r\n");
+	}
+	else if(Command("U1"))
+	{
+		U1_SendWords((const char*)&USART_Buff[3]);
 	}
 	
 	//CLI :>

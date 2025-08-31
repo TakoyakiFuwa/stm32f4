@@ -10,6 +10,7 @@
 #define		InUI_view_button			14		//按键记忆显示
 #define		InUI_view_infor				15		//bmp图片信息
 #define		InUI_view_bmpfix			16		//bmp修正
+#define 	InUI_view_view				17		//放大查看bmp
 
 void Page_View(void);
 void Other_Button(uint8_t InFT);

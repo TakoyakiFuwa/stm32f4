@@ -22,6 +22,12 @@ extern tft_page		PAGE[];
 uint16_t index_bmp = 0;
 int8_t d_width=0,pix=0;
 char file[50];
+char file_name[50];
+/*  传输给f1的数据  */
+extern char f1_filename[50];
+extern char f1_filepath[50];
+extern uint8_t f1_dwidth;
+extern uint8_t f1_fixpx;
 
 void Render_View_BackGround(tft_ui* u)
 {
@@ -127,10 +133,9 @@ void Other_Button(uint8_t InFT)
 }
 void UP_ViewChange(tft_ui* u)
 {
-	char b[50];
-	index_bmp = Proj_bmp(file,b,1);
+	index_bmp = Proj_bmp(file,file_name,1);
 	//UI重新加载
-	Other_StringCpy(u->value_text,b);
+	Other_StringCpy(u->value_text,file_name);
 	UI_AddRender(u);
 	//图片刷新
 	TFTF_DrawRect(0,0,114,85,InCor_Purple);
@@ -140,10 +145,9 @@ void UP_ViewChange(tft_ui* u)
 }
 void DOWN_ViewChange(tft_ui* u)
 {
-	char b[50];
-	index_bmp = Proj_bmp(file,b,-1);
+	index_bmp = Proj_bmp(file,file_name,-1);
 	//UI重新加载
-	Other_StringCpy(u->value_text,b);
+	Other_StringCpy(u->value_text,file_name);
 	UI_AddRender(u);
 	//图片刷新
 	TFTF_DrawRect(0,0,114,85,InCor_Purple);
@@ -161,6 +165,7 @@ void Left_OverView(tft_ui* u)
 		TFT_SetRotation(Rota_BMP);
 		BMP_AdjustBMP(file,d_width,pix,114,85,TFT_Write16Data,Proj_SetRectLU);
 		TFT_SetRotation(Rota_UI);
+		INS_UpDown(&UI[InUI_view_overview],InUI_view_bmpfix,InUI_view_upload);
 	}
 	else
 	{
@@ -171,16 +176,45 @@ void Left_OverView(tft_ui* u)
 void RIGHT_OverView(tft_ui* u)
 {
 	TFTF_DrawRect(0,0,160,128,InCor_Purple);
-	char b[50];
-	Proj_index(index_bmp,file,b);
+	Proj_index(index_bmp,file,file_name);
+	//蓝粉白旗帜
+	uint16_t rgb565 = TFT_RGB888To565(0x71c9ce);
+	TFT_SetCursor(0,0,160,43);
+	for(int i=0;i<160*43;i++)
+	{
+		TFT_Write16Data(rgb565);
+	}
+	rgb565 = TFT_RGB888To565(0xf6f6f6);
+	TFT_SetCursor(0,43,160,43);
+	for(int i=0;i<160*43;i++)
+	{
+		TFT_Write16Data(rgb565);
+	}
+	rgb565 = TFT_RGB888To565(0xffc7c7);
+	TFT_SetCursor(0,86,160,43);
+	for(int i=0;i<160*43;i++)
+	{
+		TFT_Write16Data(rgb565);
+	}
+	//加载图像
 	TFT_SetRotation(Rota_BMP);
 	BMP_AdjustBMP(file,d_width,pix,160,128,TFT_Write16Data,Proj_SetRectNormal);
 	TFT_SetRotation(Rota_UI);
 	u->value_num = 1;
 	UI[InUI_view_button].is_present = 0;
+	//？
+	u->Func_Event_DOWN = Left_OverView;
+	u->Func_Event_UP = Left_OverView;
 }
-
-
+void RIGHT_View_Load(tft_ui* u)
+{
+	f1_dwidth = d_width;
+	f1_fixpx = pix;
+	Other_StringCpy(f1_filename,file_name);
+	Other_StringCpy(f1_filepath,file);
+	U1_SendWords("CONFIG7");
+	TFT_Clear(InCor_Orange);
+}
 
 
 
@@ -199,6 +233,7 @@ void Page_View(void)
 	INS_Text(&UI[InUI_view_upload],"Load >",6);
 	INS_UpDown(&UI[InUI_view_upload],InUI_view_overview,InUI_view_upload);
 	UI[InUI_view_upload].Func_Event_LEFT = Event_ToViewChange;
+	UI[InUI_view_upload].Func_Event_RIGHT = RIGHT_View_Load;
 	//图片放大
 	UI[InUI_view_overview] = UI_CreateUI(109,94,InFT_font_Pixel_1608,InCor_Black,InCor_White,Render_Text);
 	INS_Text(&UI[InUI_view_overview],"View >",6);
@@ -219,6 +254,7 @@ void Page_View(void)
 	UI[InUI_view_bmpfix].Func_Event_UP = Other_BmpFix;
 	UI[InUI_view_bmpfix].Func_Event_LEFT = Other_BmpFix;
 	UI[InUI_view_bmpfix].Func_Event_RIGHT = Other_BmpFix;
+	
 	
 	//创建页面
 	uint16_t ui_index[] = {
