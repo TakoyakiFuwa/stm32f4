@@ -2,8 +2,10 @@
 #define __TFT_ST7735_H__
 #include <stdint.h>
 
-#define Rota_BMP	0x20
-#define Rota_UI		0x40
+//YXV0 0000 翻转 前两位分别是Y X
+//第三位V是XY控制交换
+#define Rota_BMP	0xE0	//1110
+#define Rota_UI		0x80	//0100
 
 //工具函数
 uint16_t TFT_RGB888To565(uint32_t RGB_888);

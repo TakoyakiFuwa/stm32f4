@@ -53,6 +53,8 @@ void Main_Start(void* pvParameters)
 	xTaskCreate(Task_Render,"Render",128,NULL,1,&TASK_RENDER_Handler);
 		//下位机接口
 	xTaskCreate(Task_U1Command,"U1_Command",512,NULL,3,NULL);
+		//按键
+	xTaskCreate(Task_Button,"Button",512,NULL,4,NULL);
 		//退出临界区
 	taskEXIT_CRITICAL();
 		//加载第一张图片

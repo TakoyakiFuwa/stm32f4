@@ -14,7 +14,21 @@
   */
 void Init_Func(void)
 {
-
+	//按键初始化
+		//时钟初始化
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
+		//引脚初始化
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
+	GPIO_Init(GPIOB,&GPIO_InitStruct);
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15;
+	GPIO_Init(GPIOE,&GPIO_InitStruct);
+		
 }
 /**@brief  Func线程示例
   */
@@ -43,15 +57,15 @@ extern int8_t 	USART_RX_Signal;
 extern tft_pointer 	UI_CURSOR;
 void Cmd_Botton(void)
 {
-	int16_t sunrain = 0;
-	uint8_t is_sunrain = 0;
+//	int16_t sunrain = 0;
+//	uint8_t is_sunrain = 0;
 	while(USART_Buff[0]!='q' && USART_Buff[0]!='Q')
 	{
 		vTaskDelay(30);
 		if(USART_RX_Signal!=0)
 		{
-			sunrain = 0;
-			is_sunrain = 0;
+//			sunrain = 0;
+//			is_sunrain = 0;
 			USART_RX_Signal=0;
 			switch(USART_Buff[0])
 			{
@@ -64,7 +78,92 @@ void Cmd_Botton(void)
 			default:U_Printf("None \r\n");
 			}
 		}
-		if(sunrain++>400)
+//		if(sunrain++>400)
+//		{
+//			sunrain=-800;
+//			if(is_sunrain<2)
+//			{
+//				Other_Button(InFT_pic_SunRain_1616);
+//			}
+//			is_sunrain++;
+//		}
+	}
+}
+/**@brief  标准按键线程
+  */
+void Task_Button(void* pvParameters)
+{
+	int16_t sunrain = 0;
+	uint8_t is_sunrain = 0;
+	uint8_t delay_time = 40;
+	while(1)
+	{
+		vTaskDelay(50);
+		if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_14)==Bit_RESET)
+		{//上
+			vTaskDelay(delay_time);
+				UI_CURSOR.ui->Func_Event_UP(UI_CURSOR.ui);   Other_Button(InFT_pic_up_1616);
+			while(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_14)==Bit_RESET)
+			{
+				vTaskDelay(delay_time);
+			}
+			vTaskDelay(delay_time);
+			sunrain = 0;
+			is_sunrain = 0;
+		}
+		else if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_15)==Bit_RESET)
+		{//下
+			vTaskDelay(delay_time);
+				UI_CURSOR.ui->Func_Event_DOWN(UI_CURSOR.ui);   Other_Button(InFT_pic_down_1616);
+			while(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_15)==Bit_RESET)
+			{
+				vTaskDelay(delay_time);
+			}
+			vTaskDelay(delay_time);
+			sunrain = 0;
+			is_sunrain = 0;
+		}
+		else if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_13)==Bit_RESET)
+		{//左
+			vTaskDelay(delay_time);
+				UI_CURSOR.ui->Func_Event_LEFT(UI_CURSOR.ui);   Other_Button(InFT_pic_left_1616);
+			while(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_13)==Bit_RESET)
+			{
+				vTaskDelay(delay_time);
+			}
+			vTaskDelay(delay_time);
+			sunrain = 0;
+			is_sunrain = 0;
+		}
+		else if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10)==Bit_RESET)
+		{//右
+			vTaskDelay(delay_time);
+				UI_CURSOR.ui->Func_Event_RIGHT(UI_CURSOR.ui);   Other_Button(InFT_pic_right_1616);
+			while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10)==Bit_RESET)
+			{
+				vTaskDelay(delay_time);
+			}
+			vTaskDelay(delay_time);
+			sunrain = 0;
+			is_sunrain = 0;
+		}
+		else if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_11)==Bit_RESET)
+		{//?
+			vTaskDelay(delay_time);
+				UI_CURSOR.ui->Func_Event_Other(UI_CURSOR.ui);   Other_Button(InFT_pic_right_1616);
+			while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_11)==Bit_RESET)
+			{
+				vTaskDelay(delay_time);
+			}
+			vTaskDelay(delay_time);
+			sunrain = 0;
+			is_sunrain = 0;
+		}
+		else
+		{
+			sunrain++;
+		}
+		if(sunrain>400)
 		{
 			sunrain=-800;
 			if(is_sunrain<2)

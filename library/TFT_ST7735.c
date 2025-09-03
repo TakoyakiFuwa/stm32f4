@@ -28,15 +28,14 @@
 //#define SPI_CS_L()		SPI_HD_CS_L()
 /*  移植配置区域  */
 
-/*	当前在处理F4板子上的UI
- *	PC6		->	GND
- *	PD14	->	VCC
- *	PD13	->	SCL
- *	PD12	->	SDA
- *	PD10	->	RST
- *	PD9		->	DC
- *	PD8		->	CS
- *	PB15	->	BLK
+/*	本次项目中，引脚关系为:
+ *	GND	->	PD12/PD14
+ *	VCC	->	PB14/PD9/PD13
+ *	SCL	->	PB13
+ *	SDA	->	PB15
+ *	RST	->	PD11
+ *	DC	->	PD10	(高电平数据/低电平指令)
+ *	CS	->	PB12
  */
 /*	方向为:
  *		+--------------->
@@ -53,38 +52,37 @@
 
 /*  TFT屏幕处理  */
 	//低电平复位
-#define TFT_RST_L()		GPIOD->BSRRH = GPIO_Pin_10
-#define TFT_RST_H()		GPIOD->BSRRL = GPIO_Pin_10
+#define TFT_RST_L()		GPIOD->BSRRH = GPIO_Pin_11
+#define TFT_RST_H()		GPIOD->BSRRL = GPIO_Pin_11
 	//低电平指令
-#define TFT_DC_L()		GPIOD->BSRRH = GPIO_Pin_9
+#define TFT_DC_L()		GPIOD->BSRRH = GPIO_Pin_10
 	//高电平数据
-#define TFT_DC_H()		GPIOD->BSRRL = GPIO_Pin_9
+#define TFT_DC_H()		GPIOD->BSRRL = GPIO_Pin_10
 /**@brief  接口 配置相关引脚初始化
   *@param  void
   *@retval void
   */
 static void TFT_PinInit()
 {
-	//时钟初始化
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE);
+	//引脚时钟初始化
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
-	//引脚初始化
+	//GPIO配置
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15;
-	GPIO_Init(GPIOB,&GPIO_InitStruct);
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
-	GPIO_Init(GPIOC,&GPIO_InitStruct);
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_11|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14;
 	GPIO_Init(GPIOD,&GPIO_InitStruct);
-	//PD14->VCC / PC6->GND / PB15->BLK
-	GPIO_WriteBit(GPIOD,GPIO_Pin_14,Bit_SET);
-	GPIO_WriteBit(GPIOB,GPIO_Pin_15,Bit_SET);
-	GPIO_WriteBit(GPIOC,GPIO_Pin_6, Bit_RESET);
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15;
+	GPIO_Init(GPIOB,&GPIO_InitStruct);
+	//常规电平置位
+		//GND	->	PD12/PD14
+		//VCC	->	PB14/PD9/PD13
+	GPIO_WriteBit(GPIOD,GPIO_Pin_12|GPIO_Pin_14,Bit_RESET);
+	GPIO_WriteBit(GPIOD,GPIO_Pin_9|GPIO_Pin_13,Bit_SET);
+	GPIO_WriteBit(GPIOB,GPIO_Pin_14,Bit_SET);
 }
 
 static void TFT_SoftwareInit(void);
@@ -341,7 +339,7 @@ static void TFT_SoftwareInit(void)
 	TFT_WriteData(0x0E); 
 	
 	TFT_WriteCmd(0x36); 	//MX, MY, RGB mode 
-	TFT_WriteData(0x40);	//YXV0 0000 翻转 前两位分别是Y X
+	TFT_WriteData(Rota_UI);	//YXV0 0000 翻转 前两位分别是Y X
 							//第三位V是XY控制交换
 
 	//ST7735R Gamma Sequence
