@@ -219,19 +219,33 @@ void Init_Light(void)
   */
 /*  屏幕库  */
 #include "TFT_ST7789V.h"
-const uint16_t d_height	 = DEF_PIC_HEIGHT/3;
-const uint16_t DMA_COUNT = DEF_PIC_WIDTH*DEF_PIC_HEIGHT/3*2;
+//const uint16_t d_height	 = DEF_PIC_HEIGHT/3;
+const uint16_t DMA_COUNT = DEF_PIC_WIDTH*DEF_PIC_HEIGHT/80*2;
+extern uint8_t* tft_buffer;
 inline void Func_TFT_Show(void)
 {
-	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY,DEF_PIC_WIDTH,d_height);
-	TFT_DMA_SetAddr(&camera_data[0]);
-	TFT_DMA_Send(DMA_COUNT);
-	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY+d_height,DEF_PIC_WIDTH,d_height);
-	TFT_DMA_SetAddr(&camera_data[DMA_COUNT]);
-	TFT_DMA_Send(DMA_COUNT);
-	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY+d_height*2,DEF_PIC_WIDTH,d_height);
-	TFT_DMA_SetAddr(&camera_data[DMA_COUNT*2]);
-	TFT_DMA_Send(DMA_COUNT);
+//	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY,DEF_PIC_WIDTH,d_height);
+//	TFT_DMA_SetAddr(&tft_buffer[0]);
+//	TFT_DMA_Send(DMA_COUNT);
+//	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY+d_height,DEF_PIC_WIDTH,d_height);
+//	TFT_DMA_SetAddr(&tft_buffer[DMA_COUNT]);
+//	TFT_DMA_Send(DMA_COUNT);
+//	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY+d_height*2,DEF_PIC_WIDTH,d_height);
+//	TFT_DMA_SetAddr(&tft_buffer[DMA_COUNT*2]);
+//	TFT_DMA_Send(DMA_COUNT);
+	
+	TFT_SetCursor(DEF_TFT_DX,DEF_TFT_DY,DEF_PIC_WIDTH,DEF_PIC_HEIGHT);
+	TFT_SPI_Start();
+	
+	for(int i=0;i<80;i++)
+	{
+		DMA1_Stream4->M0AR = (uint32_t)&tft_buffer[DMA_COUNT*i];
+		DMA1_Stream4->NDTR = DMA_COUNT;
+		DMA1_Stream4->CR |= (uint32_t)DMA_SxCR_EN;
+		while(DMA_GetFlagStatus(DMA1_Stream4,DMA_FLAG_TCIF4)!=SET);
+		DMA_ClearFlag(DMA1_Stream4,DMA_FLAG_TCIF4);
+	}
+	TFT_SPI_Stop();
 }
 /**@brief  摄像头采集，屏幕刷新线程
   */
@@ -250,7 +264,7 @@ void Task_Camera(void* pvParameters)
 			continue;
 		}
 		//采集数据
-		OV_GetPixels();
+//		OV_GetPixels();
 		//屏幕显示
 		Func_TFT_Show();
 	}

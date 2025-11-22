@@ -29,6 +29,9 @@
 /*  项目中用到的全局变量  */
 //缓存数据
 uint8_t camera_data[DEF_PIC_HEIGHT*DEF_PIC_WIDTH*2];
+uint8_t camera_data_1[DEF_PIC_HEIGHT*DEF_PIC_WIDTH*2];
+//屏幕显示在哪个缓冲区
+uint8_t* tft_buffer = &camera_data[0];
 //控制UI线程
 extern int8_t STATUS_ON_UI;
 //控制camera线程
@@ -69,7 +72,9 @@ void Main_Start(void* pvParameters)
 		//摄像头初始化
 		//如果摄像头出现画面偏移 建议检查Task_Camera是否为最高优先级
 	Init_OV((uint32_t*)&camera_data[0]);
+	Init_OV_DoubleBuffer((uint32_t*)&camera_data_1[0]);
 	camera_data[0] = 0;
+	camera_data_1[0] = 0;
 		//按键/补光灯内容
 	Init_Light();
 	Init_Botton();
@@ -128,6 +133,14 @@ int8_t Cmd(void)
 			Func_TFT_Show();
 			U_Printf("[%d,%d] \r\n",a,b);
 		}
+	}
+	else if(Command("PAUSE"))
+	{
+		OV_Pause();
+	}
+	else if(Command("CONTINUE"))
+	{
+		OV_Continue();
 	}
 	else if(Command("a"))
 	{

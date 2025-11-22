@@ -48,7 +48,8 @@
 #define OV_Output_width 	DEF_PIC_WIDTH		//最高好像是314 且会有黑边
 #define OV_Output_height	DEF_PIC_HEIGHT		//最高248 达到240标准
 //数据存放地址
-extern uint8_t camera_data[];
+uint32_t* ov_dma_addr0;
+uint32_t* ov_dma_addr1;
 //SCL
 #define OV_SCL(x)	GPIO_WriteBit(GPIOD,GPIO_Pin_12,(BitAction)x);for(int i=0;i<100;i++);
 //SDA
@@ -331,6 +332,7 @@ static void OV_config_window(unsigned int startx,unsigned int starty,unsigned in
 static void OV_SoftwareInit(void);
 void Init_OV(uint32_t* data_addr)
 {
+	ov_dma_addr0 = data_addr;
 	OV_PinInit();
 		//这个初始化延迟很有必要
 	vTaskDelay(100);
@@ -344,6 +346,16 @@ void Init_OV(uint32_t* data_addr)
 	vTaskDelay(100);
 		
 	U_Printf("ov7670(相机)初始化完成 \r\n");
+}
+void Init_OV_DoubleBuffer(uint32_t* addr)
+{
+	ov_dma_addr1 = addr;
+	DMA_Cmd(DMA2_Stream1,DISABLE);
+	while(DMA_GetCmdStatus(DMA2_Stream1)==ENABLE);
+	//DMA双缓冲模式
+	DMA_DoubleBufferModeConfig(DMA2_Stream1,(uint32_t)addr,DMA_Memory_1);
+	DMA_DoubleBufferModeCmd(DMA2_Stream1,ENABLE);
+	DMA_Cmd(DMA2_Stream1,ENABLE);
 }
 /*  读取像素  */
 /**@brief  获取像素并处理
@@ -395,16 +407,66 @@ static void OV_DCMI_Init(uint32_t* data_addr)
 	DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
 	DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Word;
 	DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
-	DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;
+	DMA_InitStruct.DMA_Mode = DMA_Mode_Circular;
 	DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)&DCMI->DR;
 	DMA_InitStruct.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
 	DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
 	DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 	DMA_InitStruct.DMA_Priority = DMA_Priority_High;
 	DMA_Init(DMA2_Stream1,&DMA_InitStruct);
-	DMA_Cmd(DMA2_Stream1,DISABLE);
+	//DMA中断
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+	NVIC_InitTypeDef NVIC_InitStruct;
+	NVIC_InitStruct.NVIC_IRQChannel = DMA2_Stream1_IRQn;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 5;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 5;
+	NVIC_Init(&NVIC_InitStruct);
+	DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,ENABLE);
+	//开启DMA
+	DMA_Cmd(DMA2_Stream1,ENABLE);
 	//开启图像捕获
+	DCMI_CaptureCmd(ENABLE);
+}
+uint8_t is_ov_run = 1;	//1是正在运行,0是暂停
+void OV_Pause(void)
+{
 	DCMI_CaptureCmd(DISABLE);
+	is_ov_run = 0;
+}
+void OV_Continue(void)
+{
+	is_ov_run = 1;
+	DMA2_Stream1->NDTR = OV_Output_width*OV_Output_height/2;
+	DMA2_Stream1->M0AR = (uint32_t)ov_dma_addr0;
+	DMA2_Stream1->M1AR = (uint32_t)ov_dma_addr1;
+	DMA_Cmd(DMA2_Stream1,ENABLE);
+	DCMI_CaptureCmd(ENABLE);
+}
+extern uint8_t* tft_buffer;
+void DMA2_Stream1_IRQHandler(void)
+{
+	if(DMA_GetITStatus(DMA2_Stream1,DMA_IT_TCIF1)==SET)
+	{	
+		//是否暂停
+		if(is_ov_run == 0)
+		{
+			DMA_Cmd(DMA2_Stream1,DISABLE);
+			while(DMA_GetCmdStatus(DMA2_Stream1)==ENABLE);
+		}
+		//更换TFT显示缓冲区
+		if(DMA_GetCurrentMemoryTarget(DMA2_Stream1))//Memory1
+		{
+//			U_Putchar('-');
+			tft_buffer = (uint8_t*)ov_dma_addr0;
+		}
+		else//Memory0
+		{
+//			U_Putchar('0');
+			tft_buffer = (uint8_t*)ov_dma_addr1;
+		}
+		DMA_ClearITPendingBit(DMA2_Stream1,DMA_IT_TCIF1);
+	}
 }
 /**@brief  接收图像窗口设置
   */
